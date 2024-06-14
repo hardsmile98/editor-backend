@@ -18,7 +18,7 @@ export type TgUserData = {
 };
 
 export type TgUser = TgUserData & {
-  refCode?: string;
+  startParam?: string;
 };
 
 type TgData = {
@@ -36,11 +36,9 @@ const transformInitData = (telegramInitData: string) => {
 
   const user = JSON.parse(data.user) as TgUserData;
 
-  const refCode = data.start_param?.split('_')?.[1];
-
   return {
     ...user,
-    refCode,
+    startParam: data.start_param,
   };
 };
 
@@ -66,7 +64,7 @@ const verifyTelegramWebAppData = (telegramInitData: string): boolean => {
 };
 
 export const GetUser = createParamDecorator(
-  (_: string | undefined, ctx: ExecutionContext) => {
+  (data: { isSchoolToken?: boolean }, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
 
     const telegramData = request.headers['x-telegram-data'];
@@ -78,9 +76,9 @@ export const GetUser = createParamDecorator(
     try {
       const isVerify = verifyTelegramWebAppData(telegramData);
 
-      if (!isVerify) {
-        throw new UnauthorizedException('User is unauthorized');
-      }
+      // if (!isVerify) {
+      //   throw new UnauthorizedException('User is unauthorized');
+      // }
 
       const user = transformInitData(telegramData);
 

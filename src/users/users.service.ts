@@ -6,28 +6,31 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async getReferals(user: TgUser) {
+  async getOwnerProfile(user: TgUser) {
     try {
-      const findedUser = await this.prismaService.user.findUnique({
-        where: { userId: user.id },
-        select: {
-          inviteCode: true,
+      const findedUser = await this.prismaService.owners.findFirst({
+        where: {
+          userId: user.id,
         },
       });
 
-      const referals = await this.prismaService.user.findMany({
-        where: {
-          refCode: findedUser.inviteCode,
-        },
-        select: {
-          userId: true,
-          name: true,
-          username: true,
-        },
-      });
+      if (!findedUser) {
+        const newUser = await this.prismaService.owners.create({
+          data: {
+            userId: user.id,
+            username: user.username,
+            name: user.first_name,
+          },
+        });
+
+        return {
+          user: newUser,
+          success: true,
+        };
+      }
 
       return {
-        referals,
+        user: findedUser,
         success: true,
       };
     } catch (e) {

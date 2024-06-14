@@ -7,10 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  userId            BigInt      @id @unique
-  name              String      @default("")
-  username          String      @default("")
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+model Owners {
+  userId    BigInt    @id @unique
+  name      String    @default("") @db.VarChar(128)
+  username  String    @default("") @db.VarChar(128)
+  limitShop Int       @default(1)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  schools   Schools[]
+}
+
+model Schools {
+  uuid      String   @id @default(uuid())
+  owner     Owners?  @relation(fields: [ownerId], references: [userId])
+  ownerId   BigInt?
+  token     String   @default("") @db.VarChar(128)
+  title     String   @default("") @db.VarChar(256)
+  direction String   @default("") @db.VarChar(256)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Modules {
+  id    Int    @id @default(autoincrement())
+  slug  String @unique @default("")
+  title String @default("")
+  hint  String @default("")
 }

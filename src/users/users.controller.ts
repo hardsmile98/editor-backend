@@ -6,8 +6,8 @@ import { GetUser, TgUser } from 'src/global/decorator';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get('/referals')
-  getReferals(@GetUser() user: TgUser) {
-    return this.usersService.getReferals(user);
+  @Get('/owner')
+  getOwnerProfile(@GetUser() user: TgUser) {
+    return this.usersService.getOwnerProfile(user);
   }
 }
