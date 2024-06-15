@@ -21,7 +21,7 @@ model Schools {
   uuid      String   @id @default(uuid())
   owner     Owners?  @relation(fields: [ownerId], references: [userId])
   ownerId   BigInt?
-  token     String   @default("") @db.VarChar(128)
+  token     String   @unique @default("") @db.VarChar(128)
   title     String   @default("") @db.VarChar(256)
   direction String   @default("") @db.VarChar(256)
   createdAt DateTime @default(now())
