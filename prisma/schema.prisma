@@ -18,19 +18,30 @@ model Owners {
 }
 
 model Schools {
-  uuid      String   @id @default(uuid())
-  owner     Owners?  @relation(fields: [ownerId], references: [userId])
-  ownerId   BigInt?
-  token     String   @unique @default("") @db.VarChar(128)
-  title     String   @default("") @db.VarChar(256)
-  direction String   @default("") @db.VarChar(256)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  uuid          String          @id @default(uuid())
+  owner         Owners?         @relation(fields: [ownerId], references: [userId])
+  ownerId       BigInt?
+  token         String          @unique @default("") @db.VarChar(128)
+  title         String          @default("") @db.VarChar(256)
+  direction     String          @default("") @db.VarChar(256)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  schoolModules SchoolModules[]
 }
 
 model Modules {
-  id    Int    @id @default(autoincrement())
-  slug  String @unique @default("")
-  title String @default("")
-  hint  String @default("")
+  id              Int             @id @default(autoincrement())
+  slug            String          @unique @default("")
+  title           String          @default("")
+  hint            String          @default("")
+  schoolModules   SchoolModules[]
+}
+
+model SchoolModules {
+  id         Int      @id @default(autoincrement())
+  school     Schools? @relation(fields: [schoolUuid], references: [uuid])
+  schoolUuid String?
+  module     Modules? @relation(fields: [moduleId], references: [id])
+  moduleId   Int?
+  settings   Json
 }
