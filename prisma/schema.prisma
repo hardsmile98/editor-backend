@@ -39,6 +39,7 @@ model Modules {
 
 model SchoolModules {
   id         Int             @id @default(autoincrement())
+  type       String          @default("") @db.VarChar(128)
   school     Schools?        @relation(fields: [schoolUuid], references: [uuid])
   schoolUuid String?
   module     Modules?        @relation(fields: [moduleId], references: [id])
@@ -46,5 +47,5 @@ model SchoolModules {
   settings   Json
   children   SchoolModules[] @relation("children")
   parent     SchoolModules?  @relation("children", fields: [parentId], references: [id])
-  parentId   Int?            @map("schoolModulesId")
+  parentId   Int?            @default(0)  @map("schoolModulesId")
 }
