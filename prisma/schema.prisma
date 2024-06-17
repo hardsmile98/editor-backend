@@ -30,18 +30,21 @@ model Schools {
 }
 
 model Modules {
-  id              Int             @id @default(autoincrement())
-  slug            String          @unique @default("")
-  title           String          @default("")
-  hint            String          @default("")
-  schoolModules   SchoolModules[]
+  id            Int             @id @default(autoincrement())
+  slug          String          @unique @default("")
+  title         String          @default("")
+  hint          String          @default("")
+  schoolModules SchoolModules[]
 }
 
 model SchoolModules {
-  id         Int      @id @default(autoincrement())
-  school     Schools? @relation(fields: [schoolUuid], references: [uuid])
+  id         Int             @id @default(autoincrement())
+  school     Schools?        @relation(fields: [schoolUuid], references: [uuid])
   schoolUuid String?
-  module     Modules? @relation(fields: [moduleId], references: [id])
+  module     Modules?        @relation(fields: [moduleId], references: [id])
   moduleId   Int?
   settings   Json
+  children   SchoolModules[] @relation("children")
+  parent     SchoolModules?  @relation("children", fields: [parentId], references: [id])
+  parentId   Int?            @map("schoolModulesId")
 }
