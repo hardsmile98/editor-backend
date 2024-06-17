@@ -40,6 +40,7 @@ model Modules {
 model SchoolModules {
   id         Int             @id @default(autoincrement())
   isFilled   Boolean         @default(false)
+  index      Int             
   type       String          @default("") @db.VarChar(128)
   school     Schools?        @relation(fields: [schoolUuid], references: [uuid])
   schoolUuid String?
