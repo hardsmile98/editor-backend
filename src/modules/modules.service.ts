@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ModulesQueryDto } from './dto';
+import { EditPositionDto, ModulesQueryDto } from './dto';
 
 @Injectable()
 export class ModulesService {
@@ -49,4 +49,13 @@ export class ModulesService {
   }
 
   // ПРИ ДОБАВЛЕНИИ/РЕДАКТИРОВАНИИ ПРОВЕРЯТЬ ЧТО ЭТО ВЛАДЕЛЕЦ
+  async editPositionModules(editPositionDto: EditPositionDto) {
+    try {
+      return {
+        success: true,
+      };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
 }

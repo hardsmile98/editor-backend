@@ -1,7 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { GetUser, TgUser } from 'src/global/decorator';
-import { ModulesQueryDto } from './dto';
+import { EditPositionDto, ModulesQueryDto } from './dto';
 
 @Controller('modules')
 export class ModulesController {
@@ -18,5 +18,10 @@ export class ModulesController {
     @Query() queryParam: ModulesQueryDto,
   ) {
     return this.modulesService.getSchoolModules(queryParam);
+  }
+
+  @Post('/editPosition')
+  editPosition(editPositionDto: EditPositionDto) {
+    return this.modulesService.editPositionModules(editPositionDto);
   }
 }

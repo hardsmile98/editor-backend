@@ -63,28 +63,26 @@ const verifyTelegramWebAppData = (telegramInitData: string): boolean => {
   return hashFromClient === referenceHash;
 };
 
-export const GetUser = createParamDecorator(
-  (data: { isSchoolToken?: boolean }, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
+export const GetUser = createParamDecorator((_data, ctx: ExecutionContext) => {
+  const request = ctx.switchToHttp().getRequest();
 
-    const telegramData = request.headers['x-telegram-data'];
+  const telegramData = request.headers['x-telegram-data'];
 
-    if (!telegramData) {
+  if (!telegramData) {
+    throw new UnauthorizedException('User is unauthorized');
+  }
+
+  try {
+    const isVerify = verifyTelegramWebAppData(telegramData);
+
+    if (!isVerify) {
       throw new UnauthorizedException('User is unauthorized');
     }
 
-    try {
-      const isVerify = verifyTelegramWebAppData(telegramData);
+    const user = transformInitData(telegramData);
 
-      // if (!isVerify) {
-      //   throw new UnauthorizedException('User is unauthorized');
-      // }
-
-      const user = transformInitData(telegramData);
-
-      return user;
-    } catch (error) {
-      throw new UnauthorizedException('User is unauthorized');
-    }
-  },
-);
+    return user;
+  } catch (_error) {
+    throw new UnauthorizedException('User is unauthorized');
+  }
+});
