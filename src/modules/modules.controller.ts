@@ -21,7 +21,7 @@ export class ModulesController {
   }
 
   @Post('/editPosition')
-  editPosition(editPositionDto: EditPositionDto) {
-    return this.modulesService.editPositionModules(editPositionDto);
+  editPosition(@GetUser() user: TgUser, editPositionDto: EditPositionDto) {
+    return this.modulesService.editPositionModules(user, editPositionDto);
   }
 }
