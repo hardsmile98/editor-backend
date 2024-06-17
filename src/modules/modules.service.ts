@@ -26,6 +26,9 @@ export class ModulesService {
           schoolUuid: query.uuid,
           parentId: 0,
         },
+        include: {
+          module: true,
+        },
       });
 
       return {
