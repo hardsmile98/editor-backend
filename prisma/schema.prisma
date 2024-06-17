@@ -49,5 +49,5 @@ model SchoolModules {
   settings   Json
   children   SchoolModules[] @relation("children")
   parent     SchoolModules?  @relation("children", fields: [parentId], references: [id])
-  parentId   Int?            @default(0)  @map("parentId")
+  parentId   Int?            @map("parentId")
 }

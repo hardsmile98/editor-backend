@@ -24,15 +24,23 @@ export class ModulesService {
       const schoolModules = await this.prismaService.schoolModules.findMany({
         where: {
           schoolUuid: query.uuid,
-          parentId: 0,
+          parentId: null,
         },
         include: {
           module: true,
         },
+        orderBy: {
+          index: 'asc',
+        },
       });
 
+      const filtered = schoolModules.map((module) => ({
+        id: undefined,
+        ...module,
+      }));
+
       return {
-        schoolModules,
+        schoolModules: filtered,
         success: true,
       };
     } catch (e) {
