@@ -47,4 +47,6 @@ export class ModulesService {
       throw new BadRequestException(e.message);
     }
   }
+
+  // ПРИ ДОБАВЛЕНИИ/РЕДАКТИРОВАНИИ ПРОВЕРЯТЬ ЧТО ЭТО ВЛАДЕЛЕЦ
 }
