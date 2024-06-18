@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { GetUser, TgUser } from 'src/global/decorator';
-import { EditPositionDto, ModulesQueryDto } from './dto';
+import { AddModuleDto, EditPositionDto, ModulesQueryDto } from './dto';
 
 @Controller('modules')
 export class ModulesController {
@@ -21,7 +21,15 @@ export class ModulesController {
   }
 
   @Post('/editPosition')
-  editPosition(@GetUser() user: TgUser, editPositionDto: EditPositionDto) {
+  editPosition(
+    @GetUser() user: TgUser,
+    @Body() editPositionDto: EditPositionDto,
+  ) {
     return this.modulesService.editPositionModules(user, editPositionDto);
+  }
+
+  @Post('/addModule')
+  addModule(@GetUser() user: TgUser, @Body() addModuleDto: AddModuleDto) {
+    return this.modulesService.addModule(user, addModuleDto);
   }
 }
