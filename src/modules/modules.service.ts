@@ -78,6 +78,46 @@ export class ModulesService {
         schoolUuid: editPositionDto.schoolUuid,
       });
 
+      const moduleAdded = await this.prismaService.schoolModules.findMany({
+        where: {
+          schoolUuid: editPositionDto.schoolUuid,
+        },
+      });
+
+      const deleted = moduleAdded.filter(
+        (el) =>
+          !editPositionDto.editedModules.some(
+            (module) => module.moduleId === el.moduleId,
+          ),
+      );
+
+      if (deleted.length) {
+        await this.prismaService.schoolModules.deleteMany({
+          where: {
+            schoolUuid: editPositionDto.schoolUuid,
+            moduleId: {
+              in: deleted.map((el) => el.moduleId),
+            },
+          },
+        });
+      }
+
+      await this.prismaService.$transaction(async (tx) => {
+        await Promise.all(
+          editPositionDto.editedModules.map(async (module) => {
+            await tx.schoolModules.updateMany({
+              where: {
+                moduleId: module.moduleId,
+                schoolUuid: editPositionDto.schoolUuid,
+              },
+              data: {
+                index: module.index,
+              },
+            });
+          }),
+        );
+      });
+
       return {
         success: true,
       };
