@@ -15,7 +15,7 @@ export class TelegamService {
       );
 
       return data?.ok;
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   }

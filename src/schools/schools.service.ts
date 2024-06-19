@@ -11,6 +11,28 @@ export class SchoolsService {
     private telegramService: TelegamService,
   ) {}
 
+  async schoolAccessCheck({
+    userId,
+    schoolUuid,
+  }: {
+    userId: bigint;
+    schoolUuid: string;
+  }) {
+    const isHaveAccess = await this.prismaService.schools.findFirst({
+      select: {
+        uuid: true,
+      },
+      where: {
+        ownerId: userId,
+        uuid: schoolUuid,
+      },
+    });
+
+    if (!isHaveAccess) {
+      throw new BadRequestException('У вас нет доступа');
+    }
+  }
+
   async getSchools(user: TgUser) {
     try {
       const schools = await this.prismaService.schools.findMany({

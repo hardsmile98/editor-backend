@@ -7,5 +7,6 @@ import { TelegamModule } from 'src/telegam/telegam.module';
   imports: [TelegamModule],
   providers: [SchoolsService],
   controllers: [SchoolsController],
+  exports: [SchoolsService],
 })
 export class SchoolsModule {}

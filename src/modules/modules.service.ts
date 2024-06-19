@@ -2,32 +2,19 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddModuleDto, EditPositionDto, ModulesQueryDto } from './dto';
 import { TgUser } from 'src/global/decorator';
+import { bannerSettings } from './settings';
+import { SchoolsService } from 'src/schools/schools.service';
 
 @Injectable()
 export class ModulesService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private schoolsService: SchoolsService,
+  ) {}
 
-  async checkAccess({
-    userId,
-    schoolUuid,
-  }: {
-    userId: bigint;
-    schoolUuid: string;
-  }) {
-    const isHaveAccess = await this.prismaService.schools.findFirst({
-      select: {
-        uuid: true,
-      },
-      where: {
-        ownerId: userId,
-        uuid: schoolUuid,
-      },
-    });
-
-    if (!isHaveAccess) {
-      throw new BadRequestException('У вас нет доступа');
-    }
-  }
+  mapSettings = {
+    banner: bannerSettings,
+  };
 
   async getModules() {
     try {
@@ -73,7 +60,7 @@ export class ModulesService {
 
   async editPositionModules(user: TgUser, editPositionDto: EditPositionDto) {
     try {
-      await this.checkAccess({
+      await this.schoolsService.schoolAccessCheck({
         userId: user.id,
         schoolUuid: editPositionDto.schoolUuid,
       });
@@ -128,7 +115,7 @@ export class ModulesService {
 
   async addModule(user: TgUser, addModuleDto: AddModuleDto) {
     try {
-      await this.checkAccess({
+      await this.schoolsService.schoolAccessCheck({
         userId: user.id,
         schoolUuid: addModuleDto.schoolUuid,
       });
@@ -149,12 +136,21 @@ export class ModulesService {
         throw new BadRequestException('Этот модуль уже добавлен');
       }
 
+      const moduleFinded = await this.prismaService.modules.findFirst({
+        where: {
+          id: addModuleDto.moduleId,
+        },
+      });
+
+      const settings = this.mapSettings[moduleFinded.slug] || {};
+
       await this.prismaService.schoolModules.create({
         data: {
           index,
           moduleId: addModuleDto.moduleId,
           schoolUuid: addModuleDto.schoolUuid,
-          settings: {},
+          settings,
+          type: moduleFinded.slug,
         },
       });
 
