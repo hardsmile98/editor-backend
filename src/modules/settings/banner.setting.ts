@@ -1,53 +1,62 @@
 import { SettingTypes } from './values.settings';
 
 const bannerSettings = {
-  properties: [
-    {
-      slug: 'borderRadius',
+  properties: {
+    borderRadius: {
       title: 'Скругление блока',
-      value: 16,
+      value: 0,
       type: SettingTypes.slider,
       step: 4,
       max: 40,
     },
-    {
-      slug: 'title',
+
+    title: {
       title: 'Заголовок',
       value: '',
       type: SettingTypes.input,
     },
-    {
-      slug: 'ratio',
+
+    ratio: {
       title: 'Выбор пропорций',
       value: true,
       type: SettingTypes.switch,
     },
-    {
-      slug: 'image',
+
+    image: {
       title: 'Изображение',
       value: '',
       type: SettingTypes.file,
     },
-    {
-      slug: 'border',
+
+    border: {
       title: 'Обводка',
       value: '',
       width: 0,
       type: SettingTypes.border,
     },
-    {
-      slug: 'backgroundColor',
+
+    backgroundColor: {
       title: 'Цвет фона',
       value: '',
       type: SettingTypes.color,
     },
-    {
-      slug: 'margin',
+
+    margin: {
       title: 'Отступы',
       topValue: 8,
       bottomValue: 8,
       type: SettingTypes.margin,
     },
+  },
+
+  visibleProperties: [
+    'borderRadius',
+    'title',
+    'ratio',
+    'image',
+    'border',
+    'backgroundColor',
+    'margin',
   ],
 };
 

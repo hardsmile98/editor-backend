@@ -1,6 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddModuleDto, EditPositionDto, ModulesQueryDto } from './dto';
+import {
+  AddModuleDto,
+  EditPositionDto,
+  ModuleQueryDto,
+  ModulesQueryDto,
+} from './dto';
 import { TgUser } from 'src/global/decorator';
 import { bannerSettings } from './settings';
 import { SchoolsService } from 'src/schools/schools.service';
@@ -29,8 +34,13 @@ export class ModulesService {
     }
   }
 
-  async getSchoolModules(query: ModulesQueryDto) {
+  async getSchoolModules(user: TgUser, query: ModulesQueryDto) {
     try {
+      await this.schoolsService.schoolAccessCheck({
+        userId: user.id,
+        schoolUuid: query.uuid,
+      });
+
       const schoolModules = await this.prismaService.schoolModules.findMany({
         where: {
           schoolUuid: query.uuid,
@@ -44,13 +54,8 @@ export class ModulesService {
         },
       });
 
-      const filtered = schoolModules.map((module) => ({
-        id: undefined,
-        ...module,
-      }));
-
       return {
-        schoolModules: filtered,
+        schoolModules: schoolModules,
         success: true,
       };
     } catch (e) {
@@ -155,6 +160,29 @@ export class ModulesService {
       });
 
       return {
+        success: true,
+      };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  async getModule(user: TgUser, query: ModuleQueryDto) {
+    try {
+      await this.schoolsService.schoolAccessCheck({
+        userId: user.id,
+        schoolUuid: query.uuid,
+      });
+
+      const module = await this.prismaService.schoolModules.findFirst({
+        where: {
+          moduleId: +query.moduleId,
+          schoolUuid: query.uuid,
+        },
+      });
+
+      return {
+        module,
         success: true,
       };
     } catch (e) {

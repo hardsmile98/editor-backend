@@ -1,7 +1,12 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { GetUser, TgUser } from 'src/global/decorator';
-import { AddModuleDto, EditPositionDto, ModulesQueryDto } from './dto';
+import {
+  AddModuleDto,
+  EditPositionDto,
+  ModuleQueryDto,
+  ModulesQueryDto,
+} from './dto';
 
 @Controller('modules')
 export class ModulesController {
@@ -14,10 +19,10 @@ export class ModulesController {
 
   @Get('/selected')
   getSchoolModules(
-    @GetUser() _user: TgUser,
+    @GetUser() user: TgUser,
     @Query() queryParam: ModulesQueryDto,
   ) {
-    return this.modulesService.getSchoolModules(queryParam);
+    return this.modulesService.getSchoolModules(user, queryParam);
   }
 
   @Post('/editPosition')
@@ -31,5 +36,10 @@ export class ModulesController {
   @Post('/addModule')
   addModule(@GetUser() user: TgUser, @Body() addModuleDto: AddModuleDto) {
     return this.modulesService.addModule(user, addModuleDto);
+  }
+
+  @Get('/')
+  getModule(@GetUser() user: TgUser, @Query() queryParam: ModuleQueryDto) {
+    return this.modulesService.getModule(user, queryParam);
   }
 }
