@@ -16,6 +16,15 @@ const bannerSettings = {
       type: SettingTypes.input,
     },
 
+    fontSize: {
+      title: 'Размер заголовка',
+      value: 16,
+      type: SettingTypes.slider,
+      step: 1,
+      min: 12,
+      max: 50,
+    },
+
     ratio: {
       title: 'Выбор пропорций',
       value: true,
@@ -37,7 +46,7 @@ const bannerSettings = {
 
     backgroundColor: {
       title: 'Цвет фона',
-      value: '',
+      value: '#262626',
       type: SettingTypes.color,
     },
 
@@ -52,6 +61,7 @@ const bannerSettings = {
   visibleProperties: [
     'borderRadius',
     'title',
+    'fontSize',
     'ratio',
     'image',
     'border',
