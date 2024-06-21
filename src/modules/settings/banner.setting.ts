@@ -4,10 +4,11 @@ const bannerSettings = {
   properties: {
     borderRadius: {
       title: 'Скругление блока',
-      value: 0,
+      value: 8,
       type: SettingTypes.slider,
       step: 4,
-      max: 40,
+      min: 0,
+      max: 80,
     },
 
     title: {
@@ -25,14 +26,20 @@ const bannerSettings = {
       max: 50,
     },
 
+    color: {
+      title: 'Цвет заголовка',
+      value: '#fff',
+      type: SettingTypes.color,
+    },
+
     ratio: {
-      title: 'Выбор пропорций',
+      title: 'Прямоугольные пропорции',
       value: true,
       type: SettingTypes.switch,
     },
 
     image: {
-      title: 'Изображение',
+      title: 'Ссылка на изображение',
       value: '',
       type: SettingTypes.file,
     },
@@ -62,6 +69,7 @@ const bannerSettings = {
     'borderRadius',
     'title',
     'fontSize',
+    'color',
     'ratio',
     'image',
     'border',
