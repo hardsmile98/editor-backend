@@ -57,11 +57,20 @@ const bannerSettings = {
       type: SettingTypes.color,
     },
 
-    margin: {
-      title: 'Отступы',
-      topValue: 8,
-      bottomValue: 8,
-      type: SettingTypes.margin,
+    marginTop: {
+      title: 'Отступ сверху',
+      value: 8,
+      inputType: 'number',
+      unit: 'px',
+      type: SettingTypes.input,
+    },
+
+    marginBottom: {
+      title: 'Отступ снизу',
+      value: 8,
+      inputType: 'number',
+      unit: 'px',
+      type: SettingTypes.input,
     },
   },
 
@@ -74,7 +83,8 @@ const bannerSettings = {
     'image',
     'border',
     'backgroundColor',
-    'margin',
+    'marginTop',
+    'marginBottom',
   ],
 };
 

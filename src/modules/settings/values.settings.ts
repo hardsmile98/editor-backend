@@ -5,7 +5,6 @@ enum SettingTypes {
   file = 'file',
   color = 'color',
   border = 'border',
-  margin = 'margin',
 }
 
 export { SettingTypes };
